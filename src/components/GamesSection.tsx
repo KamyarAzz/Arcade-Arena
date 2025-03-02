@@ -8,6 +8,8 @@ import pacmanImage from "@/assets/pacman.png";
 import guessImage from "@/assets/guess.png";
 
 export default function GamesSection() {
+  // const retrievedData = localStorage.getItem("gameData");
+  // const gameData = retrievedData ? JSON.parse(retrievedData) : null;
   return (
     <div className="relative gap-6 bg-mainBg-100 p-5 md:p-10 rounded-md w-full">
       <h3 className="font-bold text-2xl">
@@ -32,7 +34,7 @@ export default function GamesSection() {
         <GameWrapper image={pacmanImage} link="/pacman">
           Pacman
         </GameWrapper>
-        <GameWrapper image={guessImage} link="/geuss-the-number">
+        <GameWrapper image={guessImage} link="/guess-the-number">
           Guess the Number
         </GameWrapper>
       </div>
