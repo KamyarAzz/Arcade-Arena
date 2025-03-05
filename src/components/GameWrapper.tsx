@@ -22,19 +22,15 @@ export default function GameWrapper({children, link, image, data}: Props) {
       />
       <div className="flex justify-between items-center gap-2 mt-4">
         <h4 className="font-bold text-lg">{children}</h4>
-        <p
-          className={`flex items-center tracking-widest${
-            (!data || !data.rating) && "!text-gray-600"
-          }`}
-        >
-          {data && data.rating ? (
-            <>
-              {data.rating} <span className="mb-0.5 ml-0.5">⭐</span>
-            </>
-          ) : (
-            "N/A"
-          )}
-        </p>
+        {data && data.rating && (
+          <p
+            className={`flex items-center tracking-widest${
+              (!data || !data.rating) && "!text-gray-600"
+            }`}
+          >
+            {data.rating} <span className="mb-0.5 ml-0.5">⭐</span>
+          </p>
+        )}
       </div>
       <div className="flex justify-between items-center gap-2 text-gray-500">
         <p className="">Highscore</p>

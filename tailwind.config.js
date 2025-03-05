@@ -63,6 +63,7 @@ export default {
       },
       animation: {
         meteor: "meteor 5s linear infinite",
+        slideIn: "slideInBottom 0.4s forwards",
       },
       keyframes: {
         meteor: {
@@ -77,6 +78,10 @@ export default {
             transform: "rotate(var(--angle)) translateX(-500px)",
             opacity: "0",
           },
+        },
+        slideInBottom: {
+          "0%": {transform: "translateY(80px)", opacity: "0"},
+          "100%": {transform: "translateY(0)", opacity: "1"},
         },
       },
     },
