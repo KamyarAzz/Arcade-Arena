@@ -28,12 +28,12 @@ export default function GameLayout({
           highscore={highscore || 0}
         />
       )}
-      <div className="relative flex justify-center items-center w-full">
+      <div className="relative flex items-center justify-center w-full">
         <Return />
-        <h1 className="font-bold text-3xl">{title}</h1>
+        <h1 className="text-3xl font-bold">{title}</h1>
       </div>
 
-      <div className="flex flex-col justify-center items-center mt-16 p-4 w-full h-max">
+      <div className="flex flex-col items-center justify-center w-full p-4 mt-16 h-max">
         {children}
       </div>
     </div>

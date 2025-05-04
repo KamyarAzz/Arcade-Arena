@@ -34,8 +34,8 @@ export default function GamesSection() {
         <GameWrapper image={pacmanImage} link="/pacman">
           Pacman
         </GameWrapper>
-        <GameWrapper image={guessImage} link="/guess-the-number">
-          Guess the Number
+        <GameWrapper image={guessImage} link="/guess-the-word">
+          Guess the Word
         </GameWrapper>
       </div>
     </div>
