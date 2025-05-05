@@ -5,7 +5,6 @@ import Snake from "@/components/pages/Snake";
 import MemoryGame from "@/components/pages/MemoryGame";
 import TicTacToe from "@/components/pages/TicTacToe";
 import DinosaurGame from "@/components/pages/DinosaurGame";
-import Pacman from "@/components/pages/Pacman";
 import GuessTheWord from "@/components/pages/GuessTheWord";
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
         <Route path="/memory-game" element={<MemoryGame />} />
         <Route path="/tic-tac-toe" element={<TicTacToe />} />
         <Route path="/dinosaur-game" element={<DinosaurGame />} />
-        <Route path="/pacman" element={<Pacman />} />
         <Route path="/guess-the-word" element={<GuessTheWord />} />
       </Routes>
     </div>

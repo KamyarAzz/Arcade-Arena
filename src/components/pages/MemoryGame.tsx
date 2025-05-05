@@ -14,10 +14,17 @@ import asset12 from "@/assets/puzzle/Asset 12.svg";
 import asset13 from "@/assets/puzzle/Asset 13.svg";
 import asset14 from "@/assets/puzzle/Asset 14.svg";
 import asset15 from "@/assets/puzzle/Asset 15.svg";
+import heartImage from "@/assets/puzzle/heart.png";
 import MemoryCard from "../MemoryCard";
 import {useEffect, useState} from "react";
+import GameSettings from "../ui/GameSettings";
 
-const items = [
+type TCards = {
+  title: string;
+  src: string;
+}[];
+
+const items: TCards = [
   {title: "asset1", src: asset1},
   {title: "asset2", src: asset2},
   {title: "asset3", src: asset3},
@@ -35,13 +42,52 @@ const items = [
   {title: "asset15", src: asset15},
 ];
 
-const amount: 5 | 10 | 15 = 10;
+const cardOptions = [
+  {title: "Few", value: 5},
+  {title: "Normal", value: 10},
+  {title: "Many", value: 15},
+];
+
+const heartOptions = [
+  {title: "Easy", value: 3},
+  {title: "Normal", value: 5},
+  {title: "Hard", value: 10},
+];
 
 export default function MemoryGame() {
+  const [hasSetOptions, setHasSetOptions] = useState(false);
+  const [options, setOptions] = useState({
+    cardsAmount: cardOptions[1].value,
+    totalHearts: heartOptions[1].value,
+  });
+
+  const settingSubmitHandler = (cardsAmount: number, totalHearts: number) => {
+    setOptions({cardsAmount, totalHearts});
+    setHasSetOptions(true);
+  };
+
+  const shuffleCards = () => {
+    const newCards = items.slice(0, options.cardsAmount);
+    const doubledCards = [...newCards, ...newCards];
+    for (let i = doubledCards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [doubledCards[i], doubledCards[j]] = [doubledCards[j], doubledCards[i]]; // Swap elements
+    }
+    setDisplayedItems(doubledCards);
+  };
+
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
   const [matchedCards, setMatchedCards] = useState<string[]>([]);
-  const [lives, setLives] = useState(3);
-  const displayedItems = items.slice(0, amount);
+  const [lives, setLives] = useState(5);
+  const [displayedItems, setDisplayedItems] = useState<TCards>();
+
+  useEffect(() => {
+    shuffleCards();
+  }, []);
+
+  useEffect(() => {
+    setLives(options.totalHearts);
+  }, [options]);
 
   const clickHandler = (title: string) => {
     if (selectedCards.length < 2) {
@@ -49,59 +95,99 @@ export default function MemoryGame() {
     }
   };
 
-  useEffect(() => {
-    const checkCards = () => {
-      if (selectedCards[0] === selectedCards[1]) {
-        setMatchedCards((prevMatchedCards) => [
-          ...prevMatchedCards,
-          selectedCards[0],
-        ]);
-      } else {
-        setLives(lives - 1);
-      }
-      setSelectedCards([]);
-    };
+  const checkCards = () => {
+    if (selectedCards[0] === selectedCards[1]) {
+      setMatchedCards((prevMatchedCards) => [
+        ...prevMatchedCards,
+        selectedCards[0],
+      ]);
+    } else {
+      setLives(() => lives - 1);
+    }
+    setSelectedCards([]);
+  };
 
+  const checkGameStatus = () => {
+    setTimeout(() => {
+      if (lives === 0) {
+        alert("You Lose!");
+        resetGame();
+      } else if (matchedCards.length === options.cardsAmount) {
+        alert("You Win!");
+        resetGame();
+      }
+    }, 300);
+  };
+
+  useEffect(() => {
+    checkGameStatus();
+  }, [lives, selectedCards]);
+
+  const resetGame = () => {
+    setSelectedCards([]);
+    setMatchedCards([]);
+    setLives(options.totalHearts);
+    setTimeout(() => {
+      shuffleCards();
+    }, 300);
+  };
+
+  useEffect(() => {
     if (selectedCards.length === 2) {
       checkCards();
     }
   }, [selectedCards]);
 
-  // useEffect(() => {
-  //   console.log(selectedCards);
-  //   console.log(matchedCards);
-  // }, [selectedCards, matchedCards]);
-
   return (
     <GameLayout title="Memory Game">
-      <div
-        className={`${
-          amount === 5
-            ? "grid-cols-5"
-            : amount === 10
-            ? "md:grid-cols-10 grid-cols-5"
-            : "md:grid-cols-10 grid-cols-4"
-        } grid gap-4 gap-y-10`}
-      >
-        {displayedItems.map((item) => (
-          <MemoryCard
-            key={item.title}
-            clickHandler={clickHandler}
-            isMatched={matchedCards.includes(item.title)}
-            item={item}
-            selectedCardLength={selectedCards.length}
-          />
-        ))}
-        {displayedItems.map((item) => (
-          <MemoryCard
-            key={item.title}
-            clickHandler={clickHandler}
-            isMatched={matchedCards.includes(item.title)}
-            item={item}
-            selectedCardLength={selectedCards.length}
-          />
-        ))}
-      </div>
+      {!hasSetOptions ? (
+        <GameSettings
+          submitHandler={settingSubmitHandler}
+          value1Title="The amount of card"
+          value2Title="Difficulty"
+          values1={cardOptions}
+          values2={heartOptions}
+        />
+      ) : (
+        <>
+          <div className="flex flex-wrap gap-3 mb-8">
+            {Array(lives)
+              .fill("")
+              .map(() => (
+                <img src={heartImage} className="w-10" alt="Lives Left" />
+              ))}
+            {Array(options.totalHearts - lives)
+              .fill("")
+              .map(() => (
+                <img
+                  src={heartImage}
+                  className="w-10 grayscale"
+                  alt="Lost Lives"
+                />
+              ))}
+          </div>
+          <div
+            className={`${
+              options.cardsAmount === 5
+                ? "grid-cols-5"
+                : options.cardsAmount === 10
+                ? "md:grid-cols-10 grid-cols-5"
+                : "md:grid-cols-10 grid-cols-4"
+            } grid gap-4 gap-y-10`}
+          >
+            {displayedItems &&
+              displayedItems.map((item, index) => (
+                <MemoryCard
+                  key={index}
+                  clickHandler={clickHandler}
+                  isMatched={matchedCards.includes(item.title)}
+                  item={item}
+                  selectedCardLength={selectedCards.length}
+                />
+              ))}
+          </div>
+        </>
+      )}
     </GameLayout>
   );
 }

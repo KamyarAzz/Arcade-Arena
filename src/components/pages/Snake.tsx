@@ -1,16 +1,29 @@
 import GameLayout from "@/components/ui/GameLayout";
 import {useEffect, useState} from "react";
+import GameSettings from "../ui/GameSettings";
+
+const sizeOptions = [
+  {title: "Small", value: 5},
+  {title: "Normal", value: 10},
+  {title: "Big", value: 20},
+];
+
+const speedOptions = [
+  {title: "Slow", value: 300},
+  {title: "Normal", value: 200},
+  {title: "Fast", value: 100},
+];
 
 export default function Snake() {
   const highscore = localStorage.getItem("snakeHighscore");
   const [details, setDetails] = useState({
-    speed: 200,
-    size: 10,
+    speed: speedOptions[1].value,
+    size: sizeOptions[1].value,
   });
-  const [hasSetDetails, setHasSetDetails] = useState(false); // Initial snake position
-  const [snake, setSnake] = useState([{x: 2, y: 2}]); // Initial snake position
-  const [score, setScore] = useState(0); // Initial score
-  const [direction, setDirection] = useState({x: 1, y: 0}); // Initial direction
+  const [hasSetDetails, setHasSetDetails] = useState(false);
+  const [snake, setSnake] = useState([{x: 2, y: 2}]);
+  const [score, setScore] = useState(0);
+  const [direction, setDirection] = useState({x: 1, y: 0});
   const [food, setFood] = useState({
     x: Math.floor(Math.random() * details.size),
     y: Math.floor(Math.random() * details.size),
@@ -131,6 +144,11 @@ export default function Snake() {
     };
   }, [direction]);
 
+  const settingSubmitHandler = (size: number, speed: number) => {
+    setDetails({speed, size});
+    setHasSetDetails(true);
+  };
+
   return (
     <GameLayout
       gameOver={gameOver}
@@ -142,110 +160,13 @@ export default function Snake() {
       <h1 className="text-3xl text-center">Score: {score}</h1>
       <div className="flex flex-wrap justify-center items-center mt-10 w-[25rem] h-[25rem]">
         {!hasSetDetails ? (
-          <div className="flex flex-col justify-center items-center gap-4 bg-mainBg-200 shadow-inner p-6 px-16 border-2 border-gray-700 rounded-lg">
-            <h1>Select Game Size</h1>
-            <div className="flex items-center gap-8">
-              <div
-                onClick={() =>
-                  setDetails((prevDetails) => ({
-                    ...prevDetails,
-                    size: 5,
-                  }))
-                }
-                className={`px-5 py-1.5 border-2 border-theme-300 duration-150 rounded-full ${
-                  details.size === 5
-                    ? "bg-theme-300 cursor-default hober-bg-theme-100"
-                    : "cursor-pointer hover:border-theme-100"
-                }`}
-              >
-                Small
-              </div>
-              <div
-                onClick={() =>
-                  setDetails((prevDetails) => ({
-                    ...prevDetails,
-                    size: 10,
-                  }))
-                }
-                className={`px-5 py-1.5 border-2 border-theme-300 duration-150 rounded-full ${
-                  details.size === 10
-                    ? "bg-theme-300 cursor-default hober-bg-theme-100"
-                    : "cursor-pointer hover:border-theme-100"
-                }`}
-              >
-                Normal
-              </div>
-              <div
-                onClick={() =>
-                  setDetails((prevDetails) => ({
-                    ...prevDetails,
-                    size: 20,
-                  }))
-                }
-                className={`px-5 py-1.5 border-2 border-theme-300 duration-150 rounded-full ${
-                  details.size === 20
-                    ? "bg-theme-300 cursor-default hober-bg-theme-100"
-                    : "cursor-pointer hover:border-theme-100"
-                }`}
-              >
-                Big
-              </div>
-            </div>
-            <h1 className="mt-6">Select Game Speed</h1>
-            <div className="flex items-center gap-8">
-              <div
-                onClick={() =>
-                  setDetails((prevDetails) => ({
-                    ...prevDetails,
-                    speed: 300,
-                  }))
-                }
-                className={`px-5 py-1.5 border-2 border-theme-300 duration-150 rounded-full ${
-                  details.speed === 300
-                    ? "bg-theme-300 cursor-default hober-bg-theme-100"
-                    : "cursor-pointer hover:border-theme-100"
-                }`}
-              >
-                Slow
-              </div>
-              <div
-                onClick={() =>
-                  setDetails((prevDetails) => ({
-                    ...prevDetails,
-                    speed: 200,
-                  }))
-                }
-                className={`px-5 py-1.5 border-2 border-theme-300 duration-150 rounded-full ${
-                  details.speed === 200
-                    ? "bg-theme-300 cursor-default hober-bg-theme-100"
-                    : "cursor-pointer hover:border-theme-100"
-                }`}
-              >
-                Normal
-              </div>
-              <div
-                onClick={() =>
-                  setDetails((prevDetails) => ({
-                    ...prevDetails,
-                    speed: 100,
-                  }))
-                }
-                className={`px-5 py-1.5 border-2 border-theme-300 duration-150 rounded-full ${
-                  details.speed === 100
-                    ? "bg-theme-300 cursor-default hober-bg-theme-100"
-                    : "cursor-pointer hover:border-theme-100"
-                }`}
-              >
-                Fast
-              </div>
-            </div>
-            <div
-              className="mt-5 font-bold hover:text-theme-300 text-2xl italic duration-150 cursor-pointer"
-              onClick={() => setHasSetDetails(true)}
-            >
-              Play
-            </div>
-          </div>
+          <GameSettings
+            submitHandler={settingSubmitHandler}
+            value1Title="Game Size"
+            value2Title="Game Speed"
+            values1={sizeOptions}
+            values2={speedOptions}
+          />
         ) : (
           Array.from({length: details.size * details.size}).map((_, index) => {
             const row = Math.floor(index / details.size);
@@ -283,10 +204,10 @@ export default function Snake() {
                       {isHead && (
                         <>
                           <div className="flex justify-center items-center bg-white p-[4px] rounded-full w-[12px] h-[12px]">
-                            <div className="flex justify-center items-center bg-black rounded-full w-full h-full"></div>
+                            <div className="flex items-center justify-center w-full h-full bg-black rounded-full"></div>
                           </div>
                           <div className="flex justify-center items-center bg-white p-[4px] rounded-full w-[12px] h-[12px]">
-                            <div className="flex justify-center items-center bg-black rounded-full w-full h-full"></div>
+                            <div className="flex items-center justify-center w-full h-full bg-black rounded-full"></div>
                           </div>
                         </>
                       )}

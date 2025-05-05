@@ -9,6 +9,8 @@ type Props = {
   onReset?: () => void;
   score?: number;
   highscore?: number;
+  status?: "lose" | "win";
+  additionalText?: string;
 };
 
 export default function GameLayout({
@@ -18,14 +20,18 @@ export default function GameLayout({
   onReset,
   score,
   highscore,
+  status,
+  additionalText,
 }: Props) {
   return (
     <div className="w-full h-full">
       {gameOver && (
         <GameOverModal
+          status={status}
           onReset={onReset}
-          score={score || 0}
-          highscore={highscore || 0}
+          score={score}
+          highscore={highscore}
+          additionalText={additionalText}
         />
       )}
       <div className="relative flex items-center justify-center w-full">

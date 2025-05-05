@@ -11,7 +11,9 @@ export default function GuessTheWord() {
   );
   const [currentLevel, setCurrentLevel] = useState(0);
   const [statusList, setStatusList] = useState<string[][]>([]);
-
+  const [gameOver, setGameOver] = useState<undefined | "lose" | "win">(
+    undefined
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,14 +44,18 @@ export default function GuessTheWord() {
     }
     createStatusList(answers[currentLevel].join("").toLowerCase());
     if (currentLevel + 1 === 6) {
-      alert("Lose\n" + "The currect word was: " + solution);
-      setAnswers(Array(6).fill(""));
-      setCurrentLevel(0);
+      setGameOver("lose");
     } else if (answers[currentLevel].join("").toLowerCase() === solution) {
-      alert("Win");
+      setGameOver("win");
     } else {
       setCurrentLevel(currentLevel + 1);
     }
+  };
+
+  const resetGame = () => {
+    setGameOver(undefined);
+    setAnswers(Array(6).fill(""));
+    setCurrentLevel(0);
   };
 
   const createStatusList = (word: string) => {
@@ -63,7 +69,13 @@ export default function GuessTheWord() {
   };
 
   return (
-    <GameLayout title="Guess the Word">
+    <GameLayout
+      title="Guess the Word"
+      gameOver={Boolean(gameOver)}
+      status={gameOver}
+      onReset={resetGame}
+      additionalText={`The word was: ${solution}`}
+    >
       {answers.map((answer, index) => (
         <WordInput
           index={index}
