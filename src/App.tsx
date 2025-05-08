@@ -1,11 +1,11 @@
 import {Route, Routes} from "react-router";
 import Home from "@/components/pages/Home";
-import TicTacToe from "@/components/pages/TicTacToe";
 import DinosaurGame from "@/components/pages/DinosaurGame";
 import GuessTheWord from "@/components/pages/wordle/GuessTheWord";
 import MinesweeperSettings from "./components/pages/minesweeper/MinesweeperSettings";
 import SnakeSettings from "./components/pages/snake/SnakeSettings";
 import MemoryGameSettings from "./components/pages/memory/MemoryGameSettings";
+import TicTacToeSettings from "./components/pages/tic-tac-toe/TicTacToeSettings";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Route path="/minesweeper" element={<MinesweeperSettings />} />
         <Route path="/snake" element={<SnakeSettings />} />
         <Route path="/memory-game" element={<MemoryGameSettings />} />
-        <Route path="/tic-tac-toe" element={<TicTacToe />} />
+        <Route path="/tic-tac-toe" element={<TicTacToeSettings />} />
         <Route path="/dinosaur-game" element={<DinosaurGame />} />
         <Route path="/guess-the-word" element={<GuessTheWord />} />
       </Routes>

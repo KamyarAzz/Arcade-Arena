@@ -8,9 +8,9 @@ type ValueType = {
 type Props = {
   submitHandler: (value1: number, value2: number) => void;
   values1: ValueType[];
-  values2: ValueType[];
+  values2?: ValueType[];
   value1Title: string;
-  value2Title: string;
+  value2Title?: string;
 };
 
 export default function GameSettings({
@@ -21,7 +21,7 @@ export default function GameSettings({
   value2Title,
 }: Props) {
   const [value1, setValue1] = useState(values1[1].value);
-  const [value2, setValue2] = useState(values2[1].value);
+  const [value2, setValue2] = useState(values2 && values2[1].value);
 
   return (
     <div className="flex items-center justify-center w-full h-full mb-20">
@@ -32,7 +32,7 @@ export default function GameSettings({
             <div
               key={item.title}
               onClick={() => setValue1(item.value)}
-              className={`md:px-5 px-3 py-1.5 w-20 md:w-24 text-center border-2 border-theme-300 duration-150 rounded-full ${
+              className={`md:px-5 px-3 py-1.5 w-20 md:w-28 text-center border-2 border-theme-300 duration-150 rounded-full ${
                 value1 === item.value
                   ? "bg-theme-300 cursor-default hober-bg-theme-100"
                   : "cursor-pointer hover:border-theme-100"
@@ -42,25 +42,29 @@ export default function GameSettings({
             </div>
           ))}
         </div>
-        <h1 className="mt-6 text-xl">Select {value2Title}</h1>
-        <div className="flex items-center gap-8">
-          {values2.map((item) => (
-            <div
-              key={item.title}
-              onClick={() => setValue2(item.value)}
-              className={`md:px-5 px-3 py-1.5 w-20 md:w-24 text-center border-2 border-theme-300 duration-150 rounded-full ${
-                value2 === item.value
-                  ? "bg-theme-300 cursor-default hober-bg-theme-100"
-                  : "cursor-pointer hover:border-theme-100"
-              }`}
-            >
-              {item.title}
+        {values2 && value2Title && (
+          <>
+            <h1 className="mt-6 text-xl">Select {value2Title}</h1>
+            <div className="flex items-center gap-8">
+              {values2.map((item) => (
+                <div
+                  key={item.title}
+                  onClick={() => setValue2(item.value)}
+                  className={`md:px-5 px-3 py-1.5 w-20 md:w-28 text-center border-2 border-theme-300 duration-150 rounded-full ${
+                    value2 === item.value
+                      ? "bg-theme-300 cursor-default hober-bg-theme-100"
+                      : "cursor-pointer hover:border-theme-100"
+                  }`}
+                >
+                  {item.title}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
         <div
           className="mt-5 text-2xl italic font-bold duration-150 cursor-pointer hover:text-theme-300"
-          onClick={() => submitHandler(value1, value2)}
+          onClick={() => submitHandler(value1, value2 || 0)}
         >
           Play
         </div>
