@@ -1,5 +1,6 @@
 // import {useEffect} from "react";
 
+import {useEffect, useRef} from "react";
 import LetterInput from "./LetterInput";
 
 type Props = {
@@ -17,6 +18,8 @@ export default function WordInput({
   statusList,
   index,
 }: Props) {
+  const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(5).fill(null));
+
   const updateCharacter = (charIndex: number, newChar: string) => {
     setValue((prevList: string[][]) => {
       const newList = prevList.map((innerArray, i) => {
@@ -29,7 +32,21 @@ export default function WordInput({
       });
       return newList;
     });
+
+    if (newChar && charIndex < 4) {
+      inputRefs.current[charIndex + 1]?.focus();
+    }
   };
+
+  const handleBackspace = (charIndex: number) => {
+    if (charIndex > 0) {
+      inputRefs.current[charIndex - 1]?.focus();
+    }
+  };
+
+  useEffect(() => {
+    if (!disabled) inputRefs.current[0]?.focus();
+  }, [disabled]);
 
   return (
     <div className="flex flex-row items-center justify-center gap-5 p-2">
@@ -37,6 +54,10 @@ export default function WordInput({
         .fill("")
         .map((_, i) => (
           <LetterInput
+            onBackspace={handleBackspace}
+            ref={(el: HTMLInputElement | null) => {
+              inputRefs.current[i] = el;
+            }}
             statusList={statusList ? statusList[i] : null}
             key={i}
             index={i}

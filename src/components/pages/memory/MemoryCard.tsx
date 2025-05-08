@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
-import backgroundImage from "@/assets/puzzle/background.jpg";
+// import backgroundImage from "@/assets/puzzle/background.jpg";
 type Props = {
   item: {title: string; src: string};
   clickHandler: (title: string) => void;
   isMatched: boolean;
   selectedCardLength: number;
+  selected: boolean;
 };
 
 export default function MemoryCard({
@@ -12,6 +13,7 @@ export default function MemoryCard({
   isMatched,
   clickHandler,
   selectedCardLength,
+  selected,
 }: Props) {
   const [flipped, setFlipped] = useState(isMatched || false);
 
@@ -29,7 +31,6 @@ export default function MemoryCard({
   }, [isMatched, selectedCardLength]);
 
   useEffect(() => {
-    console.log(isMatched);
     if (isMatched) setFlipped(true);
   }, [isMatched]);
 
@@ -42,7 +43,7 @@ export default function MemoryCard({
       onClick={cardClickHandler}
       className={`relative w-16 md:w-20 aspect-[9/16] bg-slate-800 transition-transform duration-500 ease-in-out rounded-md shadow-lg cursor-pointer ${
         flipped ? "rotate-y-0 cursor-default" : "rotate-y-180 cursor-pointer"
-      }`}
+      } ${selected ? "shadow-lg shadow-theme-300" : ""}`}
     >
       <img
         style={{backfaceVisibility: "hidden"}}
@@ -51,11 +52,15 @@ export default function MemoryCard({
         className="absolute w-4/5 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
         draggable={false}
       />
-      <img
-        style={{backfaceVisibility: "hidden", transform: "rotateY(180deg)"}}
-        src={backgroundImage}
-        alt="Background"
-        className="absolute object-cover w-full"
+      <div
+        style={{
+          backfaceVisibility: "hidden",
+          transform: "rotateY(180deg)",
+          opacity: 0.8,
+          background:
+            "linear-gradient(135deg, var(--primary-theme) 25%, transparent 25%) -10px 0/ 20px 20px, linear-gradient(225deg, var(--secondary-theme) 25%, transparent 25%) -10px 0/ 20px 20px, linear-gradient(315deg, var(--primary-theme) 25%, transparent 25%) 0px 0/ 20px 20px, linear-gradient(45deg, var(--secondary-theme) 25%, transparent 25%) 0px 0/ 20px 20px",
+        }}
+        className="absolute object-cover w-full h-full rounded-md bg-mainBg-300"
         draggable={false}
       />
     </div>

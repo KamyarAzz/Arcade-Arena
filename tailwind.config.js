@@ -14,6 +14,7 @@ export default {
           100: "var(--primary-background)",
           200: "var(--charcoal-gray)",
           300: "var(--secondary-background)",
+          400: "var(--light-background)",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

@@ -1,10 +1,8 @@
 import {ReactNode} from "react";
-import Return from "./Return";
 import GameOverModal from "./GameOverModal";
 
 type Props = {
   children: ReactNode;
-  title: string;
   gameOver?: boolean;
   onReset?: () => void;
   score?: number;
@@ -15,7 +13,6 @@ type Props = {
 
 export default function GameLayout({
   children,
-  title,
   gameOver,
   onReset,
   score,
@@ -34,12 +31,7 @@ export default function GameLayout({
           additionalText={additionalText}
         />
       )}
-      <div className="relative flex items-center justify-center w-full">
-        <Return />
-        <h1 className="text-3xl font-bold">{title}</h1>
-      </div>
-
-      <div className="flex flex-col items-center justify-center w-full p-4 mt-16 h-max">
+      <div className="flex flex-col items-center justify-center w-full p-4 mt-3 md:mt-16 h-max">
         {children}
       </div>
     </div>
