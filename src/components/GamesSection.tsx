@@ -14,7 +14,7 @@ export default function GamesSection() {
       <h3 id="games" className="text-2xl font-bold">
         Most Recent <span className="text-theme-300">Right Now</span>
       </h3>
-      <div className="flex flex-wrap justify-center gap-10 mt-8">
+      <div className="flex flex-wrap justify-center gap-4 mt-8 md:gap-10">
         <GameWrapper image={minesweeperImage} link="/minesweeper">
           Minesweeper
         </GameWrapper>

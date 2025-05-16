@@ -1,7 +1,7 @@
 import GameLayout from "@/components/ui/GameLayout";
 import {useEffect, useState} from "react";
 
-type cordinate = [number, number];
+type coordinate = [number, number];
 
 type Props = {
   options: {size: number; bombs: number};
@@ -9,7 +9,7 @@ type Props = {
 
 export default function Minesweeper({options}: Props) {
   const generateBombs = (bombsAmount: number) => {
-    const array: cordinate[] = [];
+    const array: coordinate[] = [];
     while (array.length < bombsAmount) {
       const x = Math.floor(Math.random() * options.size);
       const y = Math.floor(Math.random() * options.size);
@@ -19,10 +19,10 @@ export default function Minesweeper({options}: Props) {
     return array;
   };
 
-  const [bombLocations, setBombLocations] = useState<cordinate[]>([]);
+  const [bombLocations, setBombLocations] = useState<coordinate[]>([]);
 
-  const [clearedLocations, setClearedLocations] = useState<cordinate[]>([]);
-  const [flaggedLocations, setFlaggedLocations] = useState<cordinate[]>([]);
+  const [clearedLocations, setClearedLocations] = useState<coordinate[]>([]);
+  const [flaggedLocations, setFlaggedLocations] = useState<coordinate[]>([]);
   const [clickMode, setClickMode] = useState<"shovel" | "flag">("shovel");
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [gameOver, setGameOver] = useState<undefined | "lose" | "win">(
@@ -63,6 +63,7 @@ export default function Minesweeper({options}: Props) {
           ...prevClearedLocations,
           [x, y],
         ]);
+        if (checkNearbyBombs(x, y) === " ") handleNoBombsAround(x, y);
         if (
           clearedLocations.length + 1 ===
           options.size * options.size - options.bombs
@@ -96,6 +97,36 @@ export default function Minesweeper({options}: Props) {
     }
   };
 
+  const handleNoBombsAround = (x: number, y: number) => {
+    console.log(1);
+    const newClearLocations: coordinate[] = [];
+    for (let i = -1; i < 2; i++) {
+      if (x + i >= 0) {
+        for (let j = -1; j < 2; j++) {
+          if (y + j >= 0) {
+            if (
+              !clearedLocations.find(
+                (item) => item[0] === x + i && item[1] === y + j
+              ) &&
+              !(i === 0 && j === 0)
+            ) {
+              newClearLocations.push([x + i, y + j]);
+            }
+          }
+        }
+      }
+    }
+    console.log(newClearLocations);
+    setClearedLocations((prevClearedLocations) => [
+      ...prevClearedLocations,
+      ...newClearLocations,
+    ]);
+    newClearLocations.map((loc) => {
+      if (checkNearbyBombs(loc[0], loc[1]) === " ")
+        handleNoBombsAround(loc[0], loc[1]);
+    });
+  };
+
   const checkNearbyBombs = (x: number, y: number) => {
     if (checkIfIsBomb(x, y)) return "*";
     let amount = 0;
@@ -110,6 +141,9 @@ export default function Minesweeper({options}: Props) {
         return amount++;
       }
     });
+    if (amount === 0) {
+      return " ";
+    }
     return amount;
   };
 

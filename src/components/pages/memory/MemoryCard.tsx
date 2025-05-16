@@ -13,7 +13,6 @@ export default function MemoryCard({
   isMatched,
   clickHandler,
   selectedCardLength,
-  selected,
 }: Props) {
   const [flipped, setFlipped] = useState(isMatched || false);
 
@@ -43,7 +42,7 @@ export default function MemoryCard({
       onClick={cardClickHandler}
       className={`relative w-16 md:w-20 aspect-[9/16] bg-slate-800 transition-transform duration-500 ease-in-out rounded-md shadow-lg cursor-pointer ${
         flipped ? "rotate-y-0 cursor-default" : "rotate-y-180 cursor-pointer"
-      } ${selected ? "shadow-lg shadow-theme-300" : ""}`}
+      }`}
     >
       <img
         style={{backfaceVisibility: "hidden"}}

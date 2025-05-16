@@ -1,11 +1,11 @@
 import {Route, Routes} from "react-router";
 import Home from "@/components/pages/Home";
-import DinosaurGame from "@/components/pages/DinosaurGame";
+import DinosaurGame from "@/components/pages/dinosaur/DinosaurGame";
 import GuessTheWord from "@/components/pages/wordle/GuessTheWord";
-import MinesweeperSettings from "./components/pages/minesweeper/MinesweeperSettings";
-import SnakeSettings from "./components/pages/snake/SnakeSettings";
-import MemoryGameSettings from "./components/pages/memory/MemoryGameSettings";
-import TicTacToeSettings from "./components/pages/tic-tac-toe/TicTacToeSettings";
+import MinesweeperSettings from "@/components/pages/minesweeper/MinesweeperSettings";
+import SnakeSettings from "@/components/pages/snake/SnakeSettings";
+import MemoryGameSettings from "@/components/pages/memory/MemoryGameSettings";
+import TicTacToeSettings from "@/components/pages/tic-tac-toe/TicTacToeSettings";
 
 function App() {
   return (
